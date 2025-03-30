@@ -2,7 +2,9 @@ import { RESP } from "../types/RESP";
 
 class Parser {
   private static instance: Parser;
-  private constructor() {}
+  private constructor() {
+      
+  }
 
   public static getInstance(): Parser {
     if (!Parser.instance) {
@@ -11,9 +13,10 @@ class Parser {
     return Parser.instance;
   }
 
-  public deserialise(bufferStream: string): any {
+  public deserialiser(bufferStream: string): any {
     const bufferArray = bufferStream.split(RESP.CRLF).filter(Boolean);
     bufferArray.reverse(); // reverse for efficient pop()
+    console.log(bufferArray);
     return this.parseNext(bufferArray);
   }
 
@@ -151,4 +154,4 @@ class Parser {
   }
 }
 
-export default Parser.getInstance();
+export const deserialiser = Parser.getInstance().deserialiser.bind(Parser.getInstance());

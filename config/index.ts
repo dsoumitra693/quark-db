@@ -18,7 +18,7 @@ class Config {
   }
 
   public getDefaultPort(): number {
-    return parseInt(process.env.DEFAULT_PORT!) || 6379;
+    return parseInt(process.env.DEFAULT_PORT!) || 7379;
   }
 
   public getBindAddress(): string {

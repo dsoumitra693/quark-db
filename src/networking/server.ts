@@ -1,4 +1,8 @@
 import { createServer, Server } from "net";
+import { deserialiser} from "../parser/commandParser";
+import { Logger } from "../logger";
+
+const logger = new Logger("Server");
 
 class TCPServer {
   private static instance: TCPServer;
@@ -16,17 +20,18 @@ class TCPServer {
 
   public start(port: number): void {
     this.server.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
+      logger.info(`Server is running on port ${port}`);
     });
   }
 
   private connectionListener(socket: any): void {
-    console.log("Client connected");
     socket.on("data", (data: any) => {
-      console.log(data);
+      const bufferStream = new TextDecoder().decode(data);
+      const command = deserialiser(bufferStream);
+      logger.info(`Command received: ${command}`);
     });
     socket.on("end", () => {
-      console.log("Client disconnected");
+      logger.info("Client disconnected");
     });
   }
 }
