@@ -16,7 +16,6 @@ class Parser {
   public deserialiser(bufferStream: string): any {
     const bufferArray = bufferStream.split(RESP.CRLF).filter(Boolean);
     bufferArray.reverse(); // reverse for efficient pop()
-    console.log(bufferArray);
     return this.parseNext(bufferArray);
   }
 
@@ -149,7 +148,6 @@ class Parser {
 
       map.set(key, value);
     }
-    console.log("map: ", map);
     return map;
   }
 }
