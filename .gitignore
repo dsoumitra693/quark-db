@@ -4,3 +4,5 @@ bun.lockb
 
 .env
 .env.local
+
+dist/

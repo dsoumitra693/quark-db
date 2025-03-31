@@ -9,7 +9,6 @@
 <p>Inspired by Redis, powered by modern JavaScript</p>
 
 <div>
-  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" />
   <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white" alt="Bun" />
   <img src="https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white" alt="Jest" />
@@ -17,7 +16,7 @@
 </div>
 
 <div>
-  <img src="https://img.shields.io/github/license/dsoumitra693/quark-db?style=flat-square" alt="License" />
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" />
   <img src="https://img.shields.io/github/stars/dsoumitra693/quark-db?style=flat-square" alt="Stars" />
   <img src="https://img.shields.io/github/issues/dsoumitra693/quark-db?style=flat-square" alt="Issues" />
   <img src="https://img.shields.io/github/last-commit/dsoumitra693/quark-db?style=flat-square" alt="Last Commit" />
@@ -131,6 +130,9 @@ In the future, once the project reaches a stable version, it will be published t
 ```bash
 # Start the development server with hot-reloading
 bun run dev
+
+# Build the TypeScript code
+npm run build
 ```
 
 The server will start on the default port 6379. You can connect to it using any Redis client:
@@ -141,6 +143,22 @@ redis-cli -p 6379
 
 # Or connect programmatically using any Redis client library
 ```
+
+### Docker Support
+
+QuarkDB comes with Docker support for easy deployment:
+
+```bash
+# Build the Docker image
+docker build -t quarkdb .
+
+# Run the container
+docker run -p 6379:3000 quarkdb
+```
+
+The Dockerfile uses a multi-stage build process to create a minimal production image:
+1. **BuilderStage**: Compiles TypeScript code to JavaScript
+2. **RuntimeStage**: Contains only the necessary runtime dependencies and compiled code
 
 ### Running Tests
 

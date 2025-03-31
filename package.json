@@ -3,8 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun --watch src/index.ts",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest"
+    "dev": "node --watch src/index.ts",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/bun": "latest",
