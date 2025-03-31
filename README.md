@@ -1,20 +1,56 @@
+<div align="center">
+
 # QuarkDB
 
-<div align="center">
+<img src="https://raw.githubusercontent.com/dsoumitra693/assets/main/quarkdb-logo.png" alt="QuarkDB Logo" width="180" />
+
+### A high-performance, TypeScript-native in-memory database
+
+<p>Inspired by Redis, powered by modern JavaScript</p>
+
+<div>
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" />
   <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white" alt="Bun" />
   <img src="https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white" alt="Jest" />
   <img src="https://img.shields.io/badge/Redis_Compatible-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis Compatible" />
 </div>
 
-<div align="center">
-  <h3>A high-performance, TypeScript-native in-memory database</h3>
-  <p>Inspired by Redis, powered by modern JavaScript</p>
+<div>
+  <img src="https://img.shields.io/github/license/dsoumitra693/quark-db?style=flat-square" alt="License" />
+  <img src="https://img.shields.io/github/stars/dsoumitra693/quark-db?style=flat-square" alt="Stars" />
+  <img src="https://img.shields.io/github/issues/dsoumitra693/quark-db?style=flat-square" alt="Issues" />
+  <img src="https://img.shields.io/github/last-commit/dsoumitra693/quark-db?style=flat-square" alt="Last Commit" />
 </div>
 
-## Overview
+</div>
+
+<br />
+
+## 📋 Overview
 
 QuarkDB is a lightweight, in-memory database built with TypeScript that provides Redis-compatible functionality with a modern developer experience. It implements efficient data structures and supports the RESP (Redis Serialization Protocol) for seamless communication.
+
+> "QuarkDB combines the power of Redis with the type safety of TypeScript, making it perfect for modern JavaScript applications."
+
+<details>
+<summary><strong>Table of Contents</strong></summary>
+
+- [Overview](#-overview)
+- [Features](#-features)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [API Reference](#-api-reference)
+- [Architecture](#-architecture)
+- [Performance Considerations](#-performance-considerations)
+- [Comparison](#-comparison-with-other-databases)
+- [Contributing](#-contributing)
+- [Security](#-security)
+- [Troubleshooting](#-troubleshooting)
+- [License](#-license)
+- [Acknowledgements](#-acknowledgements)
+
+</details>
 
 ## ✨ Features
 
@@ -62,14 +98,31 @@ QuarkDB is a lightweight, in-memory database built with TypeScript that provides
 
 ## 🚀 Installation
 
+### Prerequisites
+
+- [Bun](https://bun.sh/) >= 1.0.0
+- [Node.js](https://nodejs.org/) >= 18.0.0 (if not using Bun)
+- [TypeScript](https://www.typescriptlang.org/) >= 5.0.0
+
+### From GitHub
+
 ```bash
 # Clone the repository
 git clone https://github.com/dsoumitra693/quark-db.git
 cd quark-db
 
-# Install dependencies
+# Install dependencies with Bun (recommended)
 bun install
+
+# Or with npm
+npm install
 ```
+
+### Project Status
+
+> ⚠️ **Early Development Phase**: QuarkDB is currently in early development and not yet available as a package dependency. The API may change significantly between versions.
+
+In the future, once the project reaches a stable version, it will be published to package registries for easy installation as a dependency.
 
 ## 🔧 Usage
 
@@ -240,7 +293,7 @@ const isProper = set.isProperSubsetOf(set2); // false
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                      QuarkDB Server                      │
+│                      QuarkDB Server                     │
 │                                                         │
 │  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐  │
 │  │  RESP       │    │  Command    │    │  Data       │  │
@@ -319,6 +372,26 @@ QuarkDB implements a subset of Redis commands with compatible semantics:
 | Pub/Sub               | PUBLISH, SUBSCRIBE      | ⚠️ Planned              |
 | Transactions          | MULTI, EXEC, WATCH      | ⚠️ Planned              |
 
+## 📈 Performance Considerations
+
+QuarkDB is designed with performance in mind, though formal benchmarks have not yet been conducted as the project is in early development. Performance optimization is an ongoing focus area.
+
+### Future Performance Goals
+
+- Minimize memory footprint for stored data
+- Optimize operation speed for common use cases
+- Provide efficient scaling for large datasets
+- Benchmark against similar solutions once the API stabilizes
+
+> Performance benchmarks will be added in future releases as the project matures.
+
+### When to Choose QuarkDB
+
+- **TypeScript Projects**: Native TypeScript support with full type safety
+- **Modern JavaScript**: Built for modern JS/TS ecosystems
+- **Lightweight Needs**: When you need Redis-like features without the operational complexity
+- **Learning**: Excellent for understanding in-memory database concepts
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -329,13 +402,72 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-### Development Roadmap
 
-- [ ] Implement Sorted Sets (ZSet)
-- [ ] Add Pub/Sub mechanism
-- [ ] Support for transactions
-- [ ] Persistence options (RDB-like snapshots)
-- [ ] Cluster mode for horizontal scaling
+## 🔒 Security
+
+QuarkDB is designed for use in trusted environments. As with any database:
+
+- **Authentication**: Currently no built-in authentication. Use network-level security.
+- **Network Security**: Bind to localhost or use a firewall to restrict access.
+- **Input Validation**: All inputs are validated, but additional validation is recommended for production use.
+- **Data Encryption**: No built-in encryption. Use TLS for network traffic.
+
+### Security Best Practices
+
+- Run QuarkDB behind a secure proxy in production
+- Implement application-level authentication
+- Regularly update to the latest version
+- Follow the principle of least privilege when configuring access
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+<details>
+<summary><strong>Connection refused when trying to connect</strong></summary>
+
+**Possible causes:**
+- QuarkDB server is not running
+- Server is running on a different port
+- Firewall is blocking the connection
+
+**Solutions:**
+- Check if the server is running with `ps aux | grep quark`
+- Verify the port configuration
+- Check firewall settings
+</details>
+
+<details>
+<summary><strong>Memory usage grows unexpectedly</strong></summary>
+
+**Possible causes:**
+- Keys with no expiration accumulating
+- Large data structures
+
+**Solutions:**
+- Set TTL for keys that should expire
+- Monitor memory usage with built-in commands
+- Implement size limits for collections
+</details>
+
+<details>
+<summary><strong>TypeScript compilation errors</strong></summary>
+
+**Possible causes:**
+- Incompatible TypeScript version
+- Missing type definitions
+
+**Solutions:**
+- Ensure TypeScript >=5.0.0 is installed
+- Run `bun install` to reinstall dependencies
+- Check tsconfig.json settings
+</details>
+
+### Getting Help
+
+- **GitHub Issues**: For bug reports and feature requests
+- **Discussions**: For questions and community support
+- **Documentation**: Check the [official documentation](https://github.com/dsoumitra693/quark-db/wiki) (coming soon)
 
 ## 📜 License
 
@@ -346,9 +478,22 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Inspired by [Redis](https://redis.io/)
 - Built with [TypeScript](https://www.typescriptlang.org/) and [Bun](https://bun.sh/)
 - Tested with [Jest](https://jestjs.io/)
+- Thanks to all [contributors](https://github.com/dsoumitra693/quark-db/graphs/contributors)
+
+## 📚 Further Reading
+
+- [In-Memory Database Systems](https://en.wikipedia.org/wiki/In-memory_database)
+- [Redis Documentation](https://redis.io/documentation)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+- [Bun Documentation](https://bun.sh/docs)
 
 ---
 
 <div align="center">
+  <p>If you find QuarkDB useful, please consider giving it a ⭐ on GitHub!</p>
   <p>Made with ❤️ by <a href="https://github.com/dsoumitra693">Soumitra Das</a></p>
+  <br />
+  <a href="https://github.com/dsoumitra693/quark-db/issues">Report Bug</a> ·
+  <a href="https://github.com/dsoumitra693/quark-db/issues">Request Feature</a> ·
+  <a href="https://github.com/dsoumitra693/quark-db/discussions">Discussions</a>
 </div>
