@@ -1,30 +1,24 @@
 {
     "compilerOptions": {
-      "lib": ["ESNext", "DOM"],
-      "target": "ESNext",
-      "module": "ESNext",
+      "lib": ["ES2020", "DOM"],
+      "target": "ES2020",
+      "module": "commonjs",
       "moduleDetection": "force",
       "jsx": "react-jsx",
       "allowJs": true,
       "outDir": "dist",
       "rootDir": "src",
       "sourceMap": true,
-  
-      "moduleResolution": "bundler",
-      "verbatimModuleSyntax": false,
+      "moduleResolution": "node",
       "esModuleInterop": true,
       "noEmit": false,
-  
-      // Best practices
       "strict": true,
       "skipLibCheck": true,
       "noFallthroughCasesInSwitch": true,
-  
-      // Some stricter flags (disabled by default)
       "noUnusedLocals": false,
       "noUnusedParameters": false,
       "noPropertyAccessFromIndexSignature": false
     },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
 }
