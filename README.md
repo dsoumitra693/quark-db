@@ -70,6 +70,11 @@ QuarkDB is a lightweight, in-memory database built with TypeScript that provides
   - Comprehensive set operations (union, intersection, difference)
   - Subset and superset relationship testing
 
+- **SortedSet**: Self-balancing binary search tree (AVL tree) implementation for sorted data
+  - O(log n) insertion, deletion, and lookup
+  - Automatic sorting and duplicate removal
+  - Full iterator implementation
+
 ### 🔄 Protocol Support
 
 - **RESP (Redis Serialization Protocol)**: Efficient binary-safe protocol for client-server communication
@@ -177,7 +182,7 @@ bun run test --coverage
 
 ```typescript
 // index.ts
-import { HashMap, List, Set } from './src/core/dataStructures';
+import { HashMap, List, Set, SortedSet } from './src/core/dataStructures';
 
 // Create a simple key-value store
 const store = new HashMap<string, any>();
@@ -195,8 +200,14 @@ myList.set(1, 'second');
 // Store the list in our HashMap
 store.set('myList', myList);
 
+// Create a sorted set
+const sortedSet = new SortedSet<number>();
+const numbers = Array.from({ length: 1000 }, (_, i) => i);
+numbers.forEach(n => sortedSet.add(n));
+
 console.log('Stored data:', store.get('greeting')); // Hello, QuarkDB!
 console.log('List item:', myList.get(0)); // first
+console.log('Sorted values:', [...sortedSet.values()]); // [0, 1, 2, ..., 999]
 ```
 
 ## 📚 API Reference
@@ -298,11 +309,39 @@ const intersectionSet = set.intersection(set2); // {"c"}
 
 // Returns new Set with elements in set but not in set2
 const differenceSet = set.difference(set2); // {"a", "b"}
+```
 
-// Relationship testing
-const isSubset = set.isSubsetOf(set2);       // false
-const isSuperset = set.isSupersetOf(set2);   // false
-const isProper = set.isProperSubsetOf(set2); // false
+### SortedSet
+
+A self-balancing binary search tree (AVL tree) implementation for sorted data.
+
+```typescript
+// Create a new SortedSet
+const sortedSet = new SortedSet<number>();
+
+// Basic operations
+sortedSet.add(5);                    // Add a value
+sortedSet.delete(5);                 // Remove a value (returns boolean)
+const exists = sortedSet.has(5);     // Check if value exists (returns boolean)
+sortedSet.clear();                   // Clear the set
+const size = sortedSet.size();       // Get number of elements
+
+// Element access
+const first = sortedSet.first();     // Get first (smallest) element
+const last = sortedSet.last();       // Get last (largest) element
+const array = [...sortedSet.values()]; // Convert to sorted array
+
+// Iteration
+for (const value of sortedSet) {     // SortedSets are iterable
+  console.log(value);
+}
+
+// Bulk operations
+const numbers = Array.from({ length: 1000 }, (_, i) => i);
+numbers.forEach(n => sortedSet.add(n));
+
+// Values are automatically sorted
+console.log([...sortedSet.values()]); // [0, 1, 2, ..., 999]
 ```
 
 ## 🏗️ Architecture
@@ -340,7 +379,8 @@ quark-db/
 │   │   ├── dataStructures/   # Data structure implementations
 │   │   │   ├── hash.ts       # HashMap implementation
 │   │   │   ├── list.ts       # List implementation
-│   │   │   └── set.ts        # Set implementation
+│   │   │   ├── set.ts        # Set implementation
+│   │   │   └── sortedSet.ts  # SortedSet implementation
 │   │   └── index.ts          # Core exports
 │   ├── parser/               # Protocol parser
 │   │   ├── commandParser.ts  # RESP protocol parser
@@ -354,7 +394,8 @@ quark-db/
 │   │   │   └── dataStructures/  # Data structure tests
 │   │   │       ├── hash.test.ts
 │   │   │       ├── list.test.ts
-│   │   │       └── set.test.ts
+│   │   │       ├── set.test.ts
+│   │   │       └── sortedSet.test.ts
 │   │   ├── parser.test.js    # Parser tests
 │   │   └── serialiser.test.ts # Serializer tests
 │   └── integration/          # Integration tests
@@ -375,6 +416,7 @@ QuarkDB is designed for high performance, with careful attention to algorithmic 
 | List Insert/Delete     | O(n)           | O(1)             |
 | Set Add/Delete/Has     | O(1)           | O(n)             |
 | Set Union/Intersection | O(n+m)         | O(n+m)           |
+| SortedSet Add/Delete   | O(log n)       | O(n)             |
 
 ### Redis Compatibility
 
@@ -386,7 +428,7 @@ QuarkDB implements a subset of Redis commands with compatible semantics:
 | Expiration             | EXPIRE, TTL, EXPIREAT   | ✅ Full support         |
 | Lists                  | LPUSH, RPUSH, LINDEX    | ✅ Full support         |
 | Sets                   | SADD, SREM, SMEMBERS    | ✅ Full support         |
-| Sorted Sets           | ZADD, ZRANGE            | ⚠️ Planned              |
+| Sorted Sets           | ZADD, ZRANGE            | ✅ Full support         |
 | Pub/Sub               | PUBLISH, SUBSCRIBE      | ⚠️ Planned              |
 | Transactions          | MULTI, EXEC, WATCH      | ⚠️ Planned              |
 
