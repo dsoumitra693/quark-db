@@ -2,7 +2,7 @@
 
 # QuarkDB
 
-<img src="https://raw.githubusercontent.com/dsoumitra693/assets/main/quarkdb-logo.png" alt="QuarkDB Logo" width="180" />
+<img src="https://github.com/user-attachments/assets/231278ec-f7d8-4357-85e6-93e11300ea04" alt="QuarkDB Logo" width="180" />
 
 ### A high-performance, TypeScript-native in-memory database
 
