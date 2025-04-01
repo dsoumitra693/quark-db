@@ -1,4 +1,4 @@
-import List from "../../../../src/core/dataStructures/list";
+import List from "../../../../core/dataStructures/list";
 
 describe('List', () => {
   let list: List<number>;

@@ -1,4 +1,4 @@
-import { HashMap } from "./hash";
+import HashMap from "./hash";
 
 export default class Set<T> {
     private map: HashMap<T, boolean>;

@@ -1,4 +1,4 @@
-import { HashMap } from "../../../../src/core/dataStructures/hash";
+import HashMap from "../../../../core/dataStructures/hash";
 
 describe("HashMap", () => {
   let hashMap: HashMap<string, string>;

@@ -12,7 +12,7 @@ interface HashMapItem<V> {
  * @template K - The type of the keys
  * @template V - The type of the values
  */
-export class HashMap<K = string, V = string> {
+export default class HashMap<K = string, V = string> {
     private map: Map<K, HashMapItem<V>>;
 
     /**
@@ -95,22 +95,28 @@ export class HashMap<K = string, V = string> {
      * Gets an iterator of the values in the map
      * @returns An iterator of values
      */
-    public values() {
-        return this.entries().map(([_, value]) => value);
+    public *values() {
+        for (const [key, value] of this.map) {
+            if(value.ex && value.ex < Date.now()) {
+                this.delete(key);
+                continue;
+            }
+            yield value.value;
+        }
     }
 
     /**
      * Gets an iterator of the key-value pairs in the map
      * @returns An iterator of key-value pairs
      */
-    public entries() {
-        return this.map.entries().map(([key, value]) => {
+    public *entries() {
+        for (const [key, value] of this.map) {
             if(value.ex && value.ex < Date.now()) {
                 this.delete(key);
-                return null;
+                continue;
             }
-            return [key, value.value];
-        }).filter(value => value !== null);
+            yield [key, value.value];
+        }
     }
 
     /**

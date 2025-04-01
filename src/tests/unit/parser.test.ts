@@ -1,4 +1,4 @@
-import { deserialiser } from "../../src/parser/commandParser";
+import { deserialiser } from "../../parser/commandParser";
 
 describe("Parser Tests", () => {
   it("should parse simple string", () => {

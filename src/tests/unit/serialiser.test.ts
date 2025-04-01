@@ -1,6 +1,6 @@
-import respSerializer from "../../src/serializers/respSerializer";
-import { RESP } from "../../src/types/RESP";
-import { COMMON_RESP } from "../../src/utils/commonRes";
+import respSerializer from "../../serializers/respSerializer";
+import { RESP } from "../../types/RESP";
+import { COMMON_RESP } from "../../utils/commonRes";
 
 describe("respSerializer", () => {
   // Simple String Tests
