@@ -11,7 +11,6 @@
 
 <div>
   <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white" alt="Bun" />
   <img src="https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white" alt="Jest" />
   <img src="https://img.shields.io/badge/Redis_Compatible-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis Compatible" />
 </div>
