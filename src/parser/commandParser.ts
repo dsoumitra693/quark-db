@@ -1,11 +1,17 @@
 import { RESP } from "../types/RESP";
 
+/**
+ * Singleton class to parse RESP (Redis Serialization Protocol) encoded strings.
+ */
 class Parser {
   private static instance: Parser;
-  private constructor() {
-      
-  }
 
+  private constructor() {}
+
+  /**
+   * Retrieves the singleton instance of the Parser.
+   * @returns {Parser} The singleton instance.
+   */
   public static getInstance(): Parser {
     if (!Parser.instance) {
       Parser.instance = new Parser();
@@ -13,12 +19,23 @@ class Parser {
     return Parser.instance;
   }
 
+  /**
+   * Deserializes a buffer stream into its corresponding data type.
+   * @param {string} bufferStream - The RESP encoded string.
+   * @returns {any} The deserialized data.
+   */
   public deserialiser(bufferStream: string): any {
     const bufferArray = bufferStream.split(RESP.CRLF).filter(Boolean);
-    bufferArray.reverse(); // reverse for efficient pop()
+    bufferArray.reverse(); // Reverse for efficient pop()
     return this.parseNext(bufferArray);
   }
 
+  /**
+   * Parses the next element from the buffer array.
+   * @param {string[]} bufferArray - The array of string buffers.
+   * @returns {any} The parsed data.
+   * @private
+   */
   private parseNext(bufferArray: string[]): any {
     if (!bufferArray.length) return null;
 
@@ -29,7 +46,12 @@ class Parser {
     return parserFn.call(this, buffer.slice(1), bufferArray);
   }
 
-  // Mapping RESP types to their parsing functions
+  /**
+   * Maps RESP type characters to their corresponding parsing functions.
+   * @param {string} typeChar - The initial character indicating the RESP type.
+   * @returns {(payload: string, bufferArray: string[]) => any} The parsing function.
+   * @private
+   */
   private getParserFunction(
     typeChar: string
   ): (payload: string, bufferArray: string[]) => any {
@@ -46,7 +68,6 @@ class Parser {
         return this.parseArray;
       case RESP.BOOLEAN:
         return this.parseBoolean;
-
       case RESP.DOUBLE:
         return this.parseDouble;
       case RESP.NULL:
@@ -60,21 +81,47 @@ class Parser {
     }
   }
 
-  // Individual parsing methods
+  /**
+   * Parses a RESP simple string.
+   * @param {string} payload - The payload to parse.
+   * @returns {string} The parsed simple string.
+   * @private
+   */
   private parseSimpleString(payload: string): string {
     return payload;
   }
 
+  /**
+   * Parses a RESP integer.
+   * @param {string} payload - The payload to parse.
+   * @returns {number} The parsed integer.
+   * @throws Will throw an error if the format is invalid.
+   * @private
+   */
   private parseInteger(payload: string): number {
     const result = parseInt(payload, 10);
     if (isNaN(result)) throw new Error(`Invalid integer format: ${payload}`);
     return result;
   }
 
+  /**
+   * Parses a RESP error.
+   * @param {string} payload - The error message.
+   * @throws Will throw an error with the provided message.
+   * @private
+   */
   private parseError(payload: string): never {
     throw new Error(`Redis error response: ${payload}`);
   }
 
+  /**
+   * Parses a RESP bulk string.
+   * @param {string} payload - The length of the bulk string.
+   * @param {string[]} bufferArray - The array of string buffers.
+   * @returns {string | null} The parsed string or null if the bulk string is null.
+   * @throws Will throw an error if the expected length does not match.
+   * @private
+   */
   private parseBulkString(
     payload: string,
     bufferArray: string[]
@@ -94,6 +141,13 @@ class Parser {
     return bulkString;
   }
 
+  /**
+   * Parses a RESP array.
+   * @param {string} payload - The length of the array.
+   * @param {string[]} bufferArray - The array of string buffers.
+   * @returns {any[] | null} The parsed array or null if the array is null.
+   * @private
+   */
   private parseArray(payload: string, bufferArray: string[]): any[] | null {
     const arrayLen = parseInt(payload, 10);
     if (arrayLen === -1) return null; // Null Array
@@ -106,25 +160,54 @@ class Parser {
     return arr;
   }
 
+  /**
+   * Parses a RESP null type.
+   * @returns {null} Always returns null.
+   * @private
+   */
   private parseNull() {
     return null;
   }
+
+  /**
+   * Parses a RESP boolean.
+   * @param {string} payload - The payload to parse.
+   * @returns {boolean} The parsed boolean value.
+   * @throws Will throw an error if the boolean encoding is invalid.
+   * @private
+   */
   private parseBoolean(payload: string) {
     if (payload === RESP.TRUE) return true;
-    else if (payload === RESP.FALSE) return true;
+    else if (payload === RESP.FALSE) return false;
     else throw new Error("Invalid type of boolean encoding");
   }
+
+  /**
+   * Parses a RESP double.
+   * @param {string} payload - The payload to parse.
+   * @returns {number} The parsed floating point number.
+   * @throws Will throw an error if the format is invalid.
+   * @private
+   */
   private parseDouble(payload: string) {
     const result = parseFloat(payload);
-    if (isNaN(result)) throw new Error(`Invalid integer format: ${payload}`);
+    if (isNaN(result)) throw new Error(`Invalid double format: ${payload}`);
     return result;
   }
+
+  /**
+   * Parses a RESP bulk error.
+   * @param {string} payload - The length of the bulk error.
+   * @param {string[]} bufferArray - The array of string buffers.
+   * @throws Will throw an error with the bulk error message.
+   * @private
+   */
   private parseBulkError(
     payload: string,
     bufferArray: string[]
   ): string | null {
     const length = parseInt(payload, 10);
-    if (length === -1) return null; // Null Bulk String
+    if (length === -1) return null; // Null Bulk Error
     if (bufferArray.length === 0)
       throw new Error("Unexpected end of input for Bulk Error");
 
@@ -137,6 +220,15 @@ class Parser {
 
     throw new Error(bulkError);
   }
+
+  /**
+   * Parses a RESP map.
+   * @param {string} payload - The length of the map.
+   * @param {string[]} bufferArray - The array of string buffers.
+   * @returns {Map<any, any>} The parsed map.
+   * @throws Will throw an error if the map length is invalid.
+   * @private
+   */
   private parseMap(payload: string, bufferArray: string[]) {
     const mapLen = parseInt(payload, 10);
     if (mapLen < 0) throw new Error("Map length must be > 0");
