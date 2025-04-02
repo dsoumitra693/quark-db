@@ -1,6 +1,21 @@
+/**
+ * A node in the linked list.
+ */
 class Node<T> {
+    /**
+     * The value stored in the node.
+     */
     value: T;
+
+    /**
+     * The next node in the list, or null if this is the last node.
+     */
     next: Node<T> | null;
+
+    /**
+     * Creates a new node with the given value.
+     * @param value - The value to store in the node.
+     */
     constructor(value: T) {
         this.value = value;
         this.next = null;
@@ -8,20 +23,42 @@ class Node<T> {
 }
 
 export default class List<T> {
+    /**
+     * The first node in the list.
+     */
     private head: Node<T> | null = null;
+
+    /**
+     * The last node in the list.
+     */
     private tail: Node<T> | null = null;
+
+    /**
+     * The number of elements in the list.
+     */
     private _length: number = 0;
 
+    /**
+     * Creates a new list.
+     */
     constructor() {
         this.head = null;
         this.tail = null;
         this._length = 0;
     }
 
+    /**
+     * Gets the length of the list.
+     */
     public get length(): number {
         return this._length;
     }
 
+    /**
+     * Sets a value at the specified index.
+     * @param index - The index at which to set the value.
+     * @param value - The value to set.
+     */
     public set(index: number, value: T) {
         // Convert negative index to positive
         if (index < 0) index = this._length + index;
@@ -58,6 +95,10 @@ export default class List<T> {
         this._length++;
     }
 
+    /**
+     * Removes a value at the specified index.
+     * @param index - The index at which to remove the value.
+     */
     public remove(index: number) {
         if (index < 0) index = this._length + index;
 
@@ -83,6 +124,10 @@ export default class List<T> {
         this._length--;
     }
 
+    /**
+     * Gets a value at the specified index.
+     * @param index - The index at which to get the value.
+     */
     public get(index: number): T | undefined {
         // Convert negative index to positive
         if (index < 0) index = this._length + index;
@@ -110,12 +155,18 @@ export default class List<T> {
         return current ? current.value : undefined;
     }
 
+    /**
+     * Clears the list.
+     */
     public clear() {
         this.head = null;
         this.tail = null;
         this._length = 0;
     }
 
+    /**
+     * Converts the list to a string representation.
+     */
     public toString() {
         let current = this.head;
         if (!current) return "";
@@ -128,6 +179,9 @@ export default class List<T> {
         return str;
     }
 
+    /**
+     * Returns an iterator for the list.
+     */
     public [Symbol.iterator](): Iterator<T> {
         let current = this.head;
         return {
@@ -140,6 +194,9 @@ export default class List<T> {
         };
     }
 
+    /**
+     * Returns the string representation of the list.
+     */
     public [Symbol.toStringTag]() {
         return "List";
     }
