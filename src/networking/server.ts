@@ -1,8 +1,11 @@
 import { createServer, Server } from "net";
 import { deserialiser} from "../parser/commandParser";
 import { Logger } from "../logger";
+import CommandExecutor from "../core/commands";
+import serializer from "../serializers/respSerializer";
 
 const logger = new Logger("Server");
+const commandExecutor = CommandExecutor.getInstance();
 
 class TCPServer {
   private static instance: TCPServer;
@@ -25,10 +28,15 @@ class TCPServer {
   }
 
   private connectionListener(socket: any): void {
-    socket.on("data", (data: any) => {
+    socket.on("data", async (data: any) => {
       const bufferStream = new TextDecoder().decode(data);
       const command = deserialiser(bufferStream);
-      logger.info(`Command received: ${command}`);
+      try {
+        const result = await commandExecutor.execute(command);
+        socket.write(serializer.serialise(result))
+      } catch (error) {
+        socket.write(serializer.serialise(error as Error))
+      }
     });
     socket.on("end", () => {
       logger.info("Client disconnected");

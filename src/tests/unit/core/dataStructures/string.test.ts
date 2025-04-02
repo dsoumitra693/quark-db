@@ -1,4 +1,4 @@
-import String from "./string";
+import String from "../../../../core/dataStructures/string";
 
 describe("String", () => {
     describe("constructor", () => {
