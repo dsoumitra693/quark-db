@@ -1,8 +1,8 @@
 import { createServer, Server } from "net";
 import { deserialiser} from "../parser/commandParser";
-import { Logger } from "../logger";
-import CommandExecutor from "../core/commands";
+  import CommandExecutor from "../core/commands";
 import serializer from "../serializers/respSerializer";
+import { Logger } from "../utils/logger";
 
 const logger = new Logger("Server");
 const commandExecutor = CommandExecutor.getInstance();

@@ -1,6 +1,6 @@
 import config from "./config";
-import { Logger } from "./logger";
 import server from "./networking/server";
+import { Logger } from "./utils/logger";
 
 const logger = new Logger("Main");
 

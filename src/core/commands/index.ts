@@ -1,10 +1,10 @@
-import { Logger } from "../../logger";
 import hashCommands from "./hash";
 import listCommands from "./list";
 import setCommands from "./set";
 import sortedSetCommands from "./sortedSet";
 import stringCommands from "./string";
 import basicCommands from "./basic";
+import { Logger } from "../../utils/logger";
 
 const logger = new Logger("CommandExecutor");
 
