@@ -6,3 +6,5 @@ bun.lockb
 .env.local
 
 dist/
+
+unstage_commit.diff

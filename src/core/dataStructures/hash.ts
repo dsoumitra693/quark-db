@@ -88,7 +88,7 @@ export default class HashMap<K = string, V = string> {
      * @returns An iterator of keys
      */
     public keys() {
-        return this.map.keys();
+        return this.map.keys() as K;
     }
 
     /**
@@ -145,5 +145,17 @@ export default class HashMap<K = string, V = string> {
         const item = this.map.get(key) as HashMapItem<V>;
         if (!item.ex) return -1;
         return item.ex - Date.now();
+    }
+
+    /**
+     * Persists a key, removing its expiration time
+     * @param key - The key to persist
+     * @returns true if the key was found and persisted, false otherwise
+     */
+    public persist(key: K) {
+        const item = this.map.get(key) as HashMapItem<V>;
+        if (!item) return false;
+        item.ex = null;
+        return true;
     }
 }
