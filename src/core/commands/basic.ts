@@ -1,3 +1,4 @@
+import config from "../../config";
 import GlobalMap from "../globalMap";
 
 interface BasicCommand {
@@ -6,7 +7,6 @@ interface BasicCommand {
 
 interface BasicCommands {
     // Server Management
-    INFO: BasicCommand;            // Get information and statistics about the server
     CONFIG: BasicCommand;          // Get and set server configuration parameters
     CLIENT: BasicCommand;          // Control the connection of a client
 
@@ -33,9 +33,6 @@ interface BasicCommands {
     // Key Randomness
     RANDOMKEY: BasicCommand;       // Return a random key from the keyspace
 
-    // Database Management
-    FLUSHDB: BasicCommand;         // Remove all keys from the current database
-
     // Memory Management
     MEMORY: BasicCommand;          // Show memory usage details
 
@@ -49,7 +46,6 @@ interface BasicCommands {
 const globalMap = GlobalMap.getInstance()
 
 const commands: BasicCommands = {
-    INFO: (args: string[]) => Promise.resolve(),
     CONFIG: (args: string[]) => Promise.resolve(),
     CLIENT: (args: string[]) => Promise.resolve(),
     KEYS: (args: string[]) => {
@@ -99,7 +95,7 @@ const commands: BasicCommands = {
         }
         const ex = parseInt(args[1]) * 1000 + Date.now();
         globalMap.expireat(key, ex);
-        return Promise.resolve(ex/1000)
+        return Promise.resolve(ex / 1000)
     },
     PEXPIRE: (args: string[]) => {
         const key = args[0];
@@ -117,7 +113,7 @@ const commands: BasicCommands = {
     },
     PERSIST: (args: string[]) => {
         const key = args[0];
-        
+
         const isPersisted = globalMap.persist(key);
         return Promise.resolve(isPersisted)
     },
@@ -128,7 +124,7 @@ const commands: BasicCommands = {
         }
         const ex = parseInt(args[1]) * 1000 + Date.now();
         globalMap.expireat(key, ex);
-        return Promise.resolve(ex/1000)
+        return Promise.resolve(ex / 1000)
     },
     PERSISTPX: (args: string[]) => {
         const key = args[0];
@@ -145,7 +141,7 @@ const commands: BasicCommands = {
         if (!globalMap.has(oldKey)) {
             return Promise.resolve(0);
         }
-        
+
         globalMap.set(newKey, globalMap.get(oldKey)!);
         globalMap.delete(oldKey);
         return Promise.resolve(1)
@@ -171,8 +167,17 @@ const commands: BasicCommands = {
         const randomIndex = ~~(Math.random() * keys.length);
         return Promise.resolve(keys[randomIndex]);
     },
-    FLUSHDB: (args: string[]) => Promise.resolve(),
-    MEMORY: (args: string[]) => Promise.resolve(),
+    
+    MEMORY: (args: string[]) => {
+        const key = args[0];
+        if (!globalMap.has(key)) {
+            return Promise.resolve(0);
+        }
+        let value = globalMap.get(key)
+        let mem_usage = (value ? JSON.stringify(value).length : 0) * 4;
+
+        return Promise.resolve(mem_usage)
+    },
     SUBSCRIBE: (args: string[]) => Promise.resolve(),
     UNSUBSCRIBE: (args: string[]) => Promise.resolve(),
     PUBLISH: (args: string[]) => Promise.resolve(),

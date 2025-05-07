@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
     "test": "jest --config jest.config.cjs",
-    "build": "tsc"
+    "build": "tsc",
+    "git:difff":"git diff > unstage_commit.diff"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
